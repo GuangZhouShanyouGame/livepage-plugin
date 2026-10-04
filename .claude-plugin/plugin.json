@@ -1,7 +1,7 @@
 {
   "name": "livepage",
   "displayName": "LivePage",
-  "version": "2.17.1",
+  "version": "2.18.0",
   "description": "The publish button for agents: turn finished work into a web page that can be shared and keeps getting updated.",
   "author": {
     "name": "24haowan",

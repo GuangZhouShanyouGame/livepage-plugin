@@ -105,4 +105,4 @@ claude plugin install livepage@livepage
 
 ## License
 
-MIT — see [LICENSE](./LICENSE). Version 2.17.1 · source of truth: the `livepage-publish` skill pack at https://www.24haowan.com/open-skills/livepage-publish
+MIT — see [LICENSE](./LICENSE). Version 2.18.0 · source of truth: the `livepage-publish` skill pack at https://www.24haowan.com/open-skills/livepage-publish
