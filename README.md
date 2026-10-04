@@ -12,7 +12,9 @@ Weekly reports, meeting notes, proposals, dashboards, study notes, plans, guides
 
 ### What this plugin contains, and what it does
 
-- `livepage-publish` — Use when the user says "save it to LivePage", "make it a web page", "give me a link", "share it to WeChat" or "who read it", or finishes a report, proposal, notes or deck for others. Publishes a page that keeps the same link across updates, opens in WeChat, and shows who read how far plus feedback.
+- `publish-to-wechat` — **Publish to WeChat** · Use when the user says "share it to WeChat", "send this to WeChat", "make it a web page", "give me a link" or "who read it", or finishes a report, proposal, notes, guide or deck for others. Publishes to LivePage: a page that opens in WeChat, keeps the same link across updates, and shows who read how far plus feedback.
+- `daily-report-to-wechat` — **Daily report to WeChat** · Use when the user says "send today's report to WeChat", "daily report", "weekly report", "status update" or "progress update for my boss / team", or wants a recurring report the same people open in WeChat. Publishes to LivePage: one link per report series, a new version each day, and read receipts showing who opened it and how far they read.
+- `trip-plan-to-wechat` — **Trip plan to WeChat** · Use when the user says "send the itinerary to WeChat", "trip plan", "travel guide", "share the schedule with family / friends" or "let everyone vote", or wants travel companions to vote on options and follow updates on the road. Publishes to LivePage: one link for the whole trip, an optional passcode, a vote block, and updates that reach the same link.
 - One remote MCP server reference: `https://space.24haowan.com/mcp` (Streamable HTTP, OAuth 2.1 with PKCE). On first use your MCP client opens a browser so you sign in to LivePage with WeChat or Google and approve the connection; tokens are issued by LivePage and can be revoked in its web app.
 - No local code, no hooks, no scripts, no background processes. The plugin sends data only to that one server, and only when you ask Claude to publish something or to read back who viewed it. Nothing is sent anywhere else.
 
@@ -31,6 +33,17 @@ Then say, for example:
 - Save this report to LivePage for my review. Wait for my confirmation before sharing it.
 - Read the feedback on this work, preserve the original comments, and list the changes we should consider next.
 
+### Install in other agents
+
+One repository, several manifests — the same three skills install anywhere that reads Agent Skills:
+
+```bash
+npx skills add GuangZhouShanyouGame/livepage-plugin   # skills.sh
+gemini extensions install https://github.com/GuangZhouShanyouGame/livepage-plugin   # Gemini CLI
+```
+
+Cursor reads `.cursor-plugin/plugin.json` + `mcp.json`; Codex reads `.codex-plugin/plugin.json`; OpenClaw users find the same skills on ClawHub. Every manifest points at the one server above.
+
 ### Links
 
 - Website: https://space.24haowan.com/start?lang=en
@@ -45,7 +58,9 @@ Then say, for example:
 
 ### 这个插件里有什么、它会做什么
 
-- `livepage-publish` — 用户说「存到方案空间」「发成网页」「生成个链接」「分享到微信」「谁看了」，或做完周报、方案、纪要、攻略、演示稿要发给别人看时使用：发成链接不变、可反复更新的网页，微信里点开就能看，读回谁看了、看到哪、反馈。
+- `publish-to-wechat` — **发到微信** · 用户说「发到微信」「分享到微信」「发成网页」「生成个链接」「谁看了」，或做完周报、方案、纪要、攻略、演示稿要发给别人看时使用：发成链接不变、可反复更新的网页，微信里点开就能看，读回谁看了、看到哪、反馈。
+- `daily-report-to-wechat` — **日报发到微信** · 用户说「把今天的日报发到微信」「日报」「周报」「工作汇报」「进度同步给老板 / 团队」，或要一份每天都更新、同一群人在微信里看的汇报时使用：同一条链接、每天发新版本，读回谁看了、看到哪。
+- `trip-plan-to-wechat` — **行程发到微信** · 用户说「把行程发到微信」「行程单」「旅行攻略」「发给家人 / 朋友看」「大家投票选」，或要同行的人投票选方案、路上跟着看更新时使用：整趟旅行一条链接，可设口令、可收投票，路上改了同一条链接就更新。
 - 一条远程 MCP 服务器引用：`https://space.24haowan.com/mcp`（Streamable HTTP，OAuth 2.1 + PKCE）。首次使用时客户端会打开浏览器，用微信或 Google 登录活页并点「允许」；令牌由活页签发，可在其网页端随时撤销。
 - 没有本地代码、没有 hook、没有脚本、没有后台进程。插件只向这一台服务器发送数据，且只在你让 Claude 发布成果或查看阅读情况时发送；不会发到别处。
 
@@ -64,6 +79,17 @@ claude plugin install livepage@livepage
 - 把这份报告存到活页，先给我预览，等我确认后再分享。
 - 看看这份成果收到的反馈，保留原文，并列出下一步需要修改的地方。
 
+### 装进别的 Agent
+
+一个仓库、多份清单 —— 同样三个技能可以装进任何读 Agent Skills 的客户端：
+
+```bash
+npx skills add GuangZhouShanyouGame/livepage-plugin   # skills.sh
+gemini extensions install https://github.com/GuangZhouShanyouGame/livepage-plugin   # Gemini CLI
+```
+
+Cursor 读 `.cursor-plugin/plugin.json` + `mcp.json`；Codex 读 `.codex-plugin/plugin.json`；OpenClaw 用户在 ClawHub 能找到同样的技能。每份清单都指向上面那一台服务器。
+
 ### 链接
 
 - 官网: https://space.24haowan.com/start?lang=zh-CN
@@ -78,7 +104,9 @@ claude plugin install livepage@livepage
 
 ### 這個外掛裡有什麼、它會做什麼
 
-- `livepage-publish` — 用户说「存到方案空间」「发成网页」「生成个链接」「分享到微信」「谁看了」，或做完周报、方案、纪要、攻略、演示稿要发给别人看时使用：发成链接不变、可反复更新的网页，微信里点开就能看，读回谁看了、看到哪、反馈。
+- `publish-to-wechat` — **發到微信** · 用戶說「發到微信」「分享到微信」「發成網頁」「產生一個連結」「誰看了」，或做完週報、方案、紀要、攻略、簡報要發給別人看時使用：發成連結不變、可反覆更新的網頁，微信裡點開就能看，讀回誰看了、看到哪、回饋。
+- `daily-report-to-wechat` — **日報發到微信** · 用戶說「把今天的日報發到微信」「日報」「週報」「工作匯報」「進度同步給主管 / 團隊」，或要一份每天都更新、同一群人在微信裡看的匯報時使用：同一條連結、每天發新版本，讀回誰看了、看到哪。
+- `trip-plan-to-wechat` — **行程發到微信** · 用戶說「把行程發到微信」「行程表」「旅行攻略」「發給家人 / 朋友看」「大家投票選」，或要同行的人投票選方案、路上跟著看更新時使用：整趟旅行一條連結，可設口令、可收投票，路上改了同一條連結就更新。
 - 一條遠端 MCP 伺服器引用：`https://space.24haowan.com/mcp`（Streamable HTTP，OAuth 2.1 + PKCE）。首次使用時客戶端會開啟瀏覽器，用微信或 Google 登入活頁並點「允許」；權杖由活頁簽發，可在其網頁端隨時撤銷。
 - 沒有本機程式碼、沒有 hook、沒有腳本、沒有背景程序。外掛只向這一台伺服器傳送資料，且只在你讓 Claude 發布成果或查看閱讀情況時傳送；不會傳到別處。
 
@@ -97,6 +125,17 @@ claude plugin install livepage@livepage
 - 把這份報告存到活頁，先給我預覽，等我確認後再分享。
 - 看看這份成果收到的回饋，保留原文，並列出接下來需要修改的地方。
 
+### 裝進別的 Agent
+
+一個倉庫、多份清單 —— 同樣三個技能可以裝進任何讀 Agent Skills 的客戶端：
+
+```bash
+npx skills add GuangZhouShanyouGame/livepage-plugin   # skills.sh
+gemini extensions install https://github.com/GuangZhouShanyouGame/livepage-plugin   # Gemini CLI
+```
+
+Cursor 讀 `.cursor-plugin/plugin.json` + `mcp.json`；Codex 讀 `.codex-plugin/plugin.json`；OpenClaw 用戶在 ClawHub 能找到同樣的技能。每份清單都指向上面那一台伺服器。
+
 ### 連結
 
 - 官網: https://space.24haowan.com/start?lang=zh-TW
@@ -105,4 +144,4 @@ claude plugin install livepage@livepage
 
 ## License
 
-MIT — see [LICENSE](./LICENSE). Version 2.18.0 · source of truth: the `livepage-publish` skill pack at https://www.24haowan.com/open-skills/livepage-publish
+MIT — see [LICENSE](./LICENSE). Version 2.18.1 · source of truth: the `livepage-publish` skill pack at https://www.24haowan.com/open-skills/livepage-publish

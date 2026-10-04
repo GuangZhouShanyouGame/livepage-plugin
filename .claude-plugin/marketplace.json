@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "LivePage — The publish button for agents: turn finished work into a web page that can be shared and keeps getting updated.",
-    "version": "2.18.0"
+    "version": "2.18.1"
   },
   "plugins": [
     {
@@ -17,12 +17,22 @@
       "tags": [
         "livepage",
         "wechat",
-        "publish",
-        "share",
-        "report",
+        "publish-to-wechat",
+        "share-link",
+        "web-page",
+        "daily-report",
+        "weekly-report",
+        "status-update",
+        "trip-plan",
+        "itinerary",
+        "travel-guide",
+        "meeting-notes",
         "proposal",
         "deck",
-        "mcp"
+        "read-receipts",
+        "feedback",
+        "mcp",
+        "agent-publishing"
       ]
     }
   ]

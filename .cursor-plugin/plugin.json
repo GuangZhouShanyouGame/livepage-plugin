@@ -1,0 +1,33 @@
+{
+  "name": "livepage",
+  "displayName": "LivePage",
+  "version": "2.18.1",
+  "description": "The publish button for agents: turn finished work into a web page that can be shared and keeps getting updated.",
+  "author": {
+    "name": "24haowan",
+    "url": "https://space.24haowan.com"
+  },
+  "homepage": "https://space.24haowan.com/start?lang=en",
+  "repository": "https://github.com/GuangZhouShanyouGame/livepage-plugin",
+  "license": "MIT",
+  "keywords": [
+    "livepage",
+    "wechat",
+    "publish-to-wechat",
+    "share-link",
+    "web-page",
+    "daily-report",
+    "weekly-report",
+    "status-update",
+    "trip-plan",
+    "itinerary",
+    "travel-guide",
+    "meeting-notes",
+    "proposal",
+    "deck",
+    "read-receipts",
+    "feedback",
+    "mcp",
+    "agent-publishing"
+  ]
+}

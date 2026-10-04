@@ -1,0 +1,10 @@
+{
+  "name": "livepage",
+  "version": "2.18.1",
+  "description": "The publish button for agents: turn finished work into a web page that can be shared and keeps getting updated.",
+  "mcpServers": {
+    "livepage": {
+      "httpUrl": "https://space.24haowan.com/mcp"
+    }
+  }
+}

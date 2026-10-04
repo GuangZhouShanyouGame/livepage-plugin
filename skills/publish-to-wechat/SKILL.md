@@ -1,6 +1,6 @@
 ---
-name: livepage-publish
-description: "Use when the user says \"save it to LivePage\", \"make it a web page\", \"give me a link\", \"share it to WeChat\" or \"who read it\", or finishes a report, proposal, notes or deck for others. Publishes a page that keeps the same link across updates, opens in WeChat, and shows who read how far plus feedback. 用户说「存到方案空间」「发成网页」「生成个链接」「分享到微信」「谁看了」，或做完周报、方案、纪要、攻略、演示稿要发给别人看时使用：发成链接不变、可反复更新的网页，微信里点开就能看，读回谁看了、看到哪、反馈。"
+name: publish-to-wechat
+description: "Use when the user says \"share it to WeChat\", \"send this to WeChat\", \"make it a web page\", \"give me a link\" or \"who read it\", or finishes a report, proposal, notes, guide or deck for others. Publishes to LivePage: a page that opens in WeChat, keeps the same link across updates, and shows who read how far plus feedback. 用户说「发到微信」「分享到微信」「发成网页」「生成个链接」「谁看了」，或做完周报、方案、纪要、攻略、演示稿要发给别人看时使用：发成链接不变、可反复更新的网页，微信里点开就能看，读回谁看了、看到哪、反馈。 用戶說「發到微信」「分享到微信」「發成網頁」「產生一個連結」「誰看了」，或做完週報、方案、紀要、攻略、簡報要發給別人看時使用：發成連結不變、可反覆更新的網頁，微信裡點開就能看，讀回誰看了、看到哪、回饋。"
 ---
 # 成果发布与分享（活页）
 
@@ -16,7 +16,7 @@ description: "Use when the user says \"save it to LivePage\", \"make it a web pa
 
 - 当用户要在方案里引用「我们做过的类似案例」、或客户问「有没有同行业的参考」时，**先调用 `list_cases` / `get_case`**，用工具返回的实时结果回答；它比本包正文里的清单更新、更全。
 - 没接就跳过这一节：别去工具清单里找这几个名字，找不到时客户端会把名字最像的别家工具递给你。
-- 本包正文是 2026-09-23 的静态快照；两者冲突时以工具返回为准。
+- 本包正文是 2026-10-04 的静态快照；两者冲突时以工具返回为准。
 
 ## 什么时候该用方案空间（比直接「发布为网站」多的三样）
 
@@ -34,6 +34,7 @@ WorkBuddy 自带「发布为网站」：一条只读链接，够用就用它。�
 
 - **腾讯 CodeBuddy Code**（终端）：`codebuddy mcp add --scope user --transport http space https://space.24haowan.com/mcp` —— 不带 header，首次调用工具时按提示在浏览器完成授权。不想敲命令就把下面那段 JSON 写进 `~/.codebuddy/.mcp.json`（只给某个项目用则写项目根目录的 `.mcp.json`）；CodeBuddy IDE 的「MCP 服务器 → 配置」是同一写法，`type` 填 `http`。
 - **Claude Code**：`claude mcp add --transport http space https://space.24haowan.com/mcp` —— 同样不带 header，首次调用工具时弹浏览器授权。
+- **装成技能 / 插件**（正文就是这一份，任何支持 Agent Skills 的客户端都能装）：`npx skills add GuangZhouShanyouGame/livepage-plugin`（skills.sh）；Claude Code 也可以 `claude plugin marketplace add GuangZhouShanyouGame/livepage-plugin` 再 `claude plugin install livepage@livepage`；Gemini CLI：`gemini extensions install https://github.com/GuangZhouShanyouGame/livepage-plugin`。装的是同一个公开仓，连的还是上面那一个地址。
 - **腾讯 WorkBuddy**：连接器市场里搜「方案空间」（市场名「24好玩 · 方案空间」）安装，不用填地址；首次调用会弹出授权页，微信扫码、点「允许」即接入。连不上就用下面的 API Token 写法，`type` 填 `streamableHttp`。
 - **其他支持远程 MCP 的客户端**（Codex / Cherry Studio 等）：在「MCP 服务器 → 添加」里选 Streamable HTTP、填上面的地址、不填请求头，客户端会走同一套 OAuth。客户端不支持登录授权、或没有浏览器时改用 API Token：在 `https://space.24haowan.com/app` 微信扫码登录 → 「API Token」→ 创建 → 把 token 填进客户端的请求头 `Authorization: Bearer sk-space-…`。JSON 写法（走 OAuth 就把 `headers` 整段删掉；`type` 各家不同：CodeBuddy 用 `http`，WorkBuddy / Cherry Studio 一类用 `streamableHttp`）：
 
