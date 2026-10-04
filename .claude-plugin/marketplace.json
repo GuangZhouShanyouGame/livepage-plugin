@@ -1,0 +1,29 @@
+{
+  "name": "livepage",
+  "owner": {
+    "name": "24haowan",
+    "url": "https://space.24haowan.com"
+  },
+  "metadata": {
+    "description": "LivePage — The publish button for agents: turn finished work into a web page that can be shared and keeps getting updated.",
+    "version": "2.17.1"
+  },
+  "plugins": [
+    {
+      "name": "livepage",
+      "source": "./",
+      "description": "The publish button for agents: turn finished work into a web page that can be shared and keeps getting updated.",
+      "category": "productivity",
+      "tags": [
+        "livepage",
+        "wechat",
+        "publish",
+        "share",
+        "report",
+        "proposal",
+        "deck",
+        "mcp"
+      ]
+    }
+  ]
+}

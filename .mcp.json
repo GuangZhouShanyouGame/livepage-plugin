@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "livepage": {
+      "type": "http",
+      "url": "https://space.24haowan.com/mcp"
+    }
+  }
+}
