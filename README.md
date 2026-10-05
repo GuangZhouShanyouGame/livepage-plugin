@@ -6,9 +6,9 @@
 
 ## English
 
-**LivePage** — The publish button for agents: turn finished work into a web page that can be shared and keeps getting updated.
+**LivePage** — Turn the work your agent just finished into a page that opens in WeChat. Share one link, keep updating it, and read back who opened it.
 
-Weekly reports, meeting notes, proposals, dashboards, study notes, plans, guides and invitations become web pages that open in WeChat; update the same page as often as needed and the link stays the same. Organize reports, decks and interactive pages in one workspace. Control access to individual work or binders, then review device activity, reading journeys and feedback with your assistant. You and your agent create the content; LivePage hosts and shares it. Single HTML or Markdown files upload straight from the conversation; packages, PDF and PPTX use the CLI from a host with a terminal. Sign in with WeChat or Google.
+Publish what you and your agent finished — weekly reports, meeting notes, proposals, dashboards, study notes, plans, travel guides and invitations — as a web page that opens inside WeChat, where your colleagues, clients, friends and family already are. Share one link; update the same page as often as needed and the link stays the same. Organize reports, decks and interactive pages in one workspace, control who can open each work or binder, then review device-level reading activity, reading journeys and feedback with your assistant. You and your agent create the content; LivePage hosts and shares it. Single HTML or Markdown files upload straight from the conversation; packages, PDF and PPTX use the CLI from a host with a terminal. Sign in with WeChat or Google; the first sign-in creates a workspace. No plan, payment or invitation is required.
 
 ### What this plugin contains, and what it does
 
@@ -30,7 +30,7 @@ claude plugin install livepage@livepage
 Then say, for example:
 
 - Show the work and binders in my workspace.
-- Save this report to LivePage for my review. Wait for my confirmation before sharing it.
+- Save this report to LivePage as a WeChat-ready link. Wait for my confirmation before sharing it.
 - Read the feedback on this work, preserve the original comments, and list the changes we should consider next.
 
 ### Install in other agents
@@ -144,4 +144,4 @@ Cursor 讀 `.cursor-plugin/plugin.json` + `mcp.json`；Codex 讀 `.codex-plugin/
 
 ## License
 
-MIT — see [LICENSE](./LICENSE). Version 2.19.0 · source of truth: the `livepage-publish` skill pack at https://www.24haowan.com/open-skills/livepage-publish
+MIT — see [LICENSE](./LICENSE). Version 2.19.1 · source of truth: the `livepage-publish` skill pack at https://www.24haowan.com/open-skills/livepage-publish

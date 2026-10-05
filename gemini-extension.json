@@ -1,7 +1,7 @@
 {
   "name": "livepage",
-  "version": "2.19.0",
-  "description": "The publish button for agents: turn finished work into a web page that can be shared and keeps getting updated.",
+  "version": "2.19.1",
+  "description": "Turn the work your agent just finished into a page that opens in WeChat. Share one link, keep updating it, and read back who opened it.",
   "mcpServers": {
     "livepage": {
       "httpUrl": "https://space.24haowan.com/mcp"

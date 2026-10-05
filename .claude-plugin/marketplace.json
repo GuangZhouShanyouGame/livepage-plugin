@@ -5,14 +5,14 @@
     "url": "https://space.24haowan.com"
   },
   "metadata": {
-    "description": "LivePage — The publish button for agents: turn finished work into a web page that can be shared and keeps getting updated.",
-    "version": "2.19.0"
+    "description": "LivePage — Turn the work your agent just finished into a page that opens in WeChat. Share one link, keep updating it, and read back who opened it.",
+    "version": "2.19.1"
   },
   "plugins": [
     {
       "name": "livepage",
       "source": "./",
-      "description": "The publish button for agents: turn finished work into a web page that can be shared and keeps getting updated.",
+      "description": "Turn the work your agent just finished into a page that opens in WeChat. Share one link, keep updating it, and read back who opened it.",
       "category": "productivity",
       "tags": [
         "livepage",
