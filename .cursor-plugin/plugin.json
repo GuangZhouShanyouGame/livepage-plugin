@@ -1,7 +1,7 @@
 {
   "name": "livepage",
   "displayName": "LivePage",
-  "version": "2.19.2",
+  "version": "2.19.3",
   "description": "Turn the work your agent just finished into a page that opens in WeChat. Share one link, keep updating it, and read back who opened it.",
   "author": {
     "name": "24haowan",

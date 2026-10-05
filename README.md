@@ -144,4 +144,4 @@ Cursor 讀 `.cursor-plugin/plugin.json` + `mcp.json`；Codex 讀 `.codex-plugin/
 
 ## License
 
-MIT — see [LICENSE](./LICENSE). Version 2.19.2 · source of truth: the `livepage-publish` skill pack at https://www.24haowan.com/open-skills/livepage-publish
+MIT — see [LICENSE](./LICENSE). Version 2.19.3 · source of truth: the `livepage-publish` skill pack at https://www.24haowan.com/open-skills/livepage-publish
