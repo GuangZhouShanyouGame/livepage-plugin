@@ -1,6 +1,6 @@
 {
   "name": "livepage",
-  "version": "2.19.1",
+  "version": "2.19.2",
   "description": "Turn the work your agent just finished into a page that opens in WeChat. Share one link, keep updating it, and read back who opened it.",
   "mcpServers": {
     "livepage": {

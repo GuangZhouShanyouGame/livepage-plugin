@@ -8,7 +8,7 @@
 
 **LivePage** — Turn the work your agent just finished into a page that opens in WeChat. Share one link, keep updating it, and read back who opened it.
 
-Publish what you and your agent finished — weekly reports, meeting notes, proposals, dashboards, study notes, plans, travel guides and invitations — as a web page that opens inside WeChat, where your colleagues, clients, friends and family already are. Share one link; update the same page as often as needed and the link stays the same. Organize reports, decks and interactive pages in one workspace, control who can open each work or binder, then review device-level reading activity, reading journeys and feedback with your assistant. You and your agent create the content; LivePage hosts and shares it. Single HTML or Markdown files upload straight from the conversation; packages, PDF and PPTX use the CLI from a host with a terminal. Sign in with WeChat or Google; the first sign-in creates a workspace. No plan, payment or invitation is required.
+Publish what you and your agent finished — weekly reports, meeting notes, proposals, dashboards, study notes, plans, travel guides and invitations — as a web page that opens inside WeChat, where your colleagues, clients, friends and family already are. Share one link; update the same page as often as needed and the link stays the same. Organize reports, decks and interactive pages in one workspace, control who can open each work or binder, then review device-level reading activity, reading journeys and feedback with your assistant. You and your agent create the content; LivePage hosts and shares it. Single HTML or Markdown files upload straight from the conversation; packages, PDF and PPTX use the CLI from a host with a terminal. Sign in with WeChat or Google; the first sign-in creates a workspace.
 
 ### What this plugin contains, and what it does
 
@@ -144,4 +144,4 @@ Cursor 讀 `.cursor-plugin/plugin.json` + `mcp.json`；Codex 讀 `.codex-plugin/
 
 ## License
 
-MIT — see [LICENSE](./LICENSE). Version 2.19.1 · source of truth: the `livepage-publish` skill pack at https://www.24haowan.com/open-skills/livepage-publish
+MIT — see [LICENSE](./LICENSE). Version 2.19.2 · source of truth: the `livepage-publish` skill pack at https://www.24haowan.com/open-skills/livepage-publish
