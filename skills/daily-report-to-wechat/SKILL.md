@@ -25,6 +25,16 @@ description: "Use when the user says \"send today's report to WeChat\", \"daily 
 7. **把链接交出去**：把默认链接给用户转发；用户在电脑上时提醒页面右下角「扫码到微信」。要推到微信：`push_to_wechat` **默认只推给用户本人**（工作区里有别的成员也一样，别人收不到），适合每天的定时日报；要推给工作区里所有人再传 `to: "members"`（**不发给客户**）。用户本人没绑微信 / 没关注服务号时回执会说清原因并附绑定码。
 8. **第二天读回**：`get_engagement_summary`（看谁看了、看到哪）、`list_feedback`（页面上的评论）。有反馈就改稿、再按第 3 步发新版本。
 
+## 让它每天自己更新（报告任务）
+
+用户说「每天早上帮我整理一份」「让它每天自己更新」「别让我每天手动发」时，不用每天手动发新版本 —— 用 `report_task` 一把工具，三句话走完「建好 → 试跑 → 开启」：
+
+1. **建好并试跑**：`report_task`（`action: "create"`，`request` 写用户要看什么、多少条、什么不要；`schedule: { every: "day", at: "08:00" }`；已有系列就带 `proposal_id`，没有就给 `title` 新建一页；`trial: true` 顺便试跑一次）。谁能看缺省 `private`；用户说要给别人看，先问一句再改。
+2. **等试跑**：一般 5–15 分钟，好了会在用户的微信里提醒，试跑结果只有用户看得到，不发给任何人。
+3. **开启**：用户看过、说「开启」⇒ `action: "enable"`（开启前必须先试跑成功过一次）；缺省把那份试跑发成这一页的第一版。之后到点就发成新版本，链接不变，照设置提醒用户、成员和关注这一页的读者。
+4. **之后都是一句话**：改时间 / 补一句要求（request_append）/ 改谁能看 / 改提醒谁用 `action: "update"`，只传要改的；休假用 `action: "pause"`（`until` 那天自动恢复），`action: "resume"` 恢复，`action: "delete"` 不要了（这一页和已发的版本都还在），`action: "list"` 看有哪些。
+5. **照着 `say` 说**：每个动作都返回一段可以原样转述的话，照它说，不要自己编事实；时间按用户的当地钟点说（07:30），不说别的格式。
+
 ## 不要做
 
 - 不要每天新建一份成果 —— 一个系列一个 `proposal_id`。
@@ -34,4 +44,4 @@ description: "Use when the user says \"send today's report to WeChat\", \"daily 
 
 ## English summary
 
-Thin wrapper of `publish-to-wechat` for recurring reports: one LivePage proposal per report series, each day's report is a **new version** (same link), visibility `private` or `passcode` (never `public` on the user's behalf), and read receipts via `get_engagement_summary` the next day. Steps: `list_proposals` → confirm the text is final → `publish_file` (with `proposal_id` for an existing series; PDF/PPTX/multi-file via `create_cli_token` + `space-cli push`) → `get_version` until ready → `preview_version` and user approval → `publish_version` → `set_visibility` once → hand over the link (and `push_to_wechat`, which by default sends to the user only — pass `to: "members"` for everyone in the workspace) → `get_engagement_summary` / `list_feedback` tomorrow.
+Thin wrapper of `publish-to-wechat` for recurring reports: one LivePage proposal per report series, each day's report is a **new version** (same link), visibility `private` or `passcode` (never `public` on the user's behalf), and read receipts via `get_engagement_summary` the next day. Steps: `list_proposals` → confirm the text is final → `publish_file` (with `proposal_id` for an existing series; PDF/PPTX/multi-file via `create_cli_token` + `space-cli push`) → `get_version` until ready → `preview_version` and user approval → `publish_version` → `set_visibility` once → hand over the link (and `push_to_wechat`, which by default sends to the user only — pass `to: "members"` for everyone in the workspace) → `get_engagement_summary` / `list_feedback` tomorrow. To have the page updated on a schedule instead of publishing by hand, use `report_task`: `create` (with `trial: true`) → the user checks the trial (WeChat reminder, visible only to them) → `enable`; later `update` / `pause` / `resume` / `delete` / `list`, relaying each returned `say` as-is.
