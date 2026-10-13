@@ -22,7 +22,7 @@ description: "Use when the user says \"send today's report to WeChat\", \"daily 
 4. **等版本就绪**：`get_version` 到 `preview_ready` / 已发布；`converting` 就稍后再查；`review` 表示平台在复核，别人还看不到。
 5. **预览给用户看**：`preview_version`（或 `read_version` 自己核对正文）→ 用户点头后 `publish_version`。
 6. **定可见性**：第一次发时 `set_visibility`（`private` / `passcode`），之后的版本沿用，不用每天重设。
-7. **把链接交出去**：把默认链接给用户转发；用户在电脑上时提醒页面右下角「扫码到微信」。工作区成员关注了服务号的，也可以 `push_to_wechat` 直接推到他们微信（**不发给客户**）。
+7. **把链接交出去**：把默认链接给用户转发；用户在电脑上时提醒页面右下角「扫码到微信」。要推到微信：`push_to_wechat` **默认只推给用户本人**（工作区里有别的成员也一样，别人收不到），适合每天的定时日报；要推给工作区里所有人再传 `to: "members"`（**不发给客户**）。用户本人没绑微信 / 没关注服务号时回执会说清原因并附绑定码。
 8. **第二天读回**：`get_engagement_summary`（看谁看了、看到哪）、`list_feedback`（页面上的评论）。有反馈就改稿、再按第 3 步发新版本。
 
 ## 不要做
@@ -34,4 +34,4 @@ description: "Use when the user says \"send today's report to WeChat\", \"daily 
 
 ## English summary
 
-Thin wrapper of `publish-to-wechat` for recurring reports: one LivePage proposal per report series, each day's report is a **new version** (same link), visibility `private` or `passcode` (never `public` on the user's behalf), and read receipts via `get_engagement_summary` the next day. Steps: `list_proposals` → confirm the text is final → `publish_file` (with `proposal_id` for an existing series; PDF/PPTX/multi-file via `create_cli_token` + `space-cli push`) → `get_version` until ready → `preview_version` and user approval → `publish_version` → `set_visibility` once → hand over the link (and `push_to_wechat` for workspace members who follow the service account) → `get_engagement_summary` / `list_feedback` tomorrow.
+Thin wrapper of `publish-to-wechat` for recurring reports: one LivePage proposal per report series, each day's report is a **new version** (same link), visibility `private` or `passcode` (never `public` on the user's behalf), and read receipts via `get_engagement_summary` the next day. Steps: `list_proposals` → confirm the text is final → `publish_file` (with `proposal_id` for an existing series; PDF/PPTX/multi-file via `create_cli_token` + `space-cli push`) → `get_version` until ready → `preview_version` and user approval → `publish_version` → `set_visibility` once → hand over the link (and `push_to_wechat`, which by default sends to the user only — pass `to: "members"` for everyone in the workspace) → `get_engagement_summary` / `list_feedback` tomorrow.
