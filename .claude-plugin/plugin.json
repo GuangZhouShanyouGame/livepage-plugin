@@ -1,7 +1,7 @@
 {
   "name": "livepage",
   "displayName": "LivePage",
-  "version": "2.19.6",
+  "version": "2.19.7",
   "description": "Turn the work your agent just finished into a page that opens in WeChat. Share one link, keep updating it, and read back who opened it.",
   "author": {
     "name": "24haowan",
@@ -30,7 +30,6 @@
     "MCP",
     "agent publishing",
     "活页",
-    "方案空间",
     "发到微信",
     "微信",
     "分享链接",
@@ -47,7 +46,6 @@
     "阅读反馈",
     "Agent 发布",
     "活頁",
-    "方案空間",
     "發到微信",
     "分享連結",
     "發成網頁",

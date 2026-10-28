@@ -52,7 +52,7 @@ Cursor reads `.cursor-plugin/plugin.json` + `mcp.json`; Codex reads `.codex-plug
 
 ## 简体中文
 
-**活页（方案空间）** — 活页是 agent 的发布按钮：把 AI 干完的活，变成一个可分享、会更新的网页。
+**活页（LivePage）** — 活页是 agent 的发布按钮：把 AI 干完的活，变成一个可分享、会更新的网页。
 
 周报、会议纪要、方案、看板，学习笔记、备考计划，旅行攻略、聚会邀请，都能发成在微信里点开就能看的网页；同一页可反复更新，链接不变。按成果或活页夹控制访问，通过阅读记录、动线与反馈继续协作。内容由你和自己的 Agent 完成；活页负责托管、分享与回收反馈。
 
@@ -98,7 +98,7 @@ Cursor 读 `.cursor-plugin/plugin.json` + `mcp.json`；Codex 读 `.codex-plugin/
 
 ## 繁體中文
 
-**活頁（方案空間）** — 活頁是 agent 的發布按鈕：把 AI 做完的工作，變成一個可分享、會更新的網頁。
+**活頁（LivePage）** — 活頁是 agent 的發布按鈕：把 AI 做完的工作，變成一個可分享、會更新的網頁。
 
 週報、會議紀要、方案、看板，學習筆記、備考計畫，旅行攻略、聚會邀請，都能發成在微信裡點開就能看的網頁；同一頁可反覆更新，連結不變。依成果或活頁夾管理存取權限，透過閱讀紀錄、瀏覽路徑與回饋繼續協作。內容由你和自己的 Agent 完成；活頁負責託管、分享與收集回饋。
 
@@ -144,4 +144,4 @@ Cursor 讀 `.cursor-plugin/plugin.json` + `mcp.json`；Codex 讀 `.codex-plugin/
 
 ## License
 
-MIT — see [LICENSE](./LICENSE). Version 2.19.6 · source of truth: the `livepage-publish` skill pack at https://www.24haowan.com/open-skills/livepage-publish
+MIT — see [LICENSE](./LICENSE). Version 2.19.7 · source of truth: the `livepage-publish` skill pack at https://www.24haowan.com/open-skills/livepage-publish

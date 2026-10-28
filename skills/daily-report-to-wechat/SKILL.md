@@ -4,7 +4,7 @@ description: "Use when the user says \"send today's report to WeChat\", \"daily 
 ---
 # 日报 / 周报发到微信（活页）
 
-这是「方案空间（活页）」`publish-to-wechat` 技能的**场景薄包装**：同一台 MCP 服务器（`https://space.24haowan.com/mcp`）、同一套工具，只是触发词与步骤按「每天 / 每周给同一群人发汇报」这个场景写。接入方式、托管契约、纪律与判据都在 `publish-to-wechat`，这里不重复；两份一起装时，日报 / 周报类请求先按这一份走。
+这是「活页」`publish-to-wechat` 技能的**场景薄包装**：同一台 MCP 服务器（`https://space.24haowan.com/mcp`）、同一套工具，只是触发词与步骤按「每天 / 每周给同一群人发汇报」这个场景写。接入方式、托管契约、纪律与判据都在 `publish-to-wechat`，这里不重复；两份一起装时，日报 / 周报类请求先按这一份走。
 
 **什么时候用**：用户说「把今天的日报发到微信」「日报」「周报」「工作汇报」「进度同步给老板 / 团队」，或者已经有一份汇报文稿（Markdown / HTML / PDF）要给固定的几个人在微信里看。
 

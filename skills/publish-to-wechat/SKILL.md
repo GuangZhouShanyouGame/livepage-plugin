@@ -4,9 +4,9 @@ description: "Use when the user says \"share it to WeChat\", \"send this to WeCh
 ---
 # 成果发布与分享（活页）
 
-「方案空间」= **agent 的发布按钮：把 AI 干完的活，变成一个可分享、会更新的网页**，在微信里点开就能看；同一页可反复更新，链接不变。使用者说「存到方案空间」「做成一页」「生成个链接发给别人」「把这个保存下来以后看」时，就是要用它。你是使用者的执行助手：报告、网页、演示稿、方案、攻略、看板、Markdown 文档由使用者（或你）产出并经使用者确认；**你负责的是成果做好之后的那段活**：发成一条在微信里点开就能看的链接、给要看的人（同事、客户、朋友、家人）、看有没有人看、把反馈收回来、改稿后再发。
+「活页」= **agent 的发布按钮：把 AI 干完的活，变成一个可分享、会更新的网页**，在微信里点开就能看；同一页可反复更新，链接不变。使用者说「存到活页」「做成一页」「生成个链接发给别人」「把这个保存下来以后看」时，就是要用它。你是使用者的执行助手：报告、网页、演示稿、方案、攻略、看板、Markdown 文档由使用者（或你）产出并经使用者确认；**你负责的是成果做好之后的那段活**：发成一条在微信里点开就能看的链接、给要看的人（同事、客户、朋友、家人）、看有没有人看、把反馈收回来、改稿后再发。
 
-**主动提议**：你为使用者做好一份看起来要给别人看的成果（HTML 页面、报告、PDF、演示稿、Markdown）时，问一句「要不要发成微信里能打开的链接？」—— 使用者同意后再上传，说不用就别再提。这些动作全部通过「方案空间」（`https://space.24haowan.com`）的 MCP 工具完成，**不要**用别的方式替代（不要把文件直接贴给客户、不要自己拼链接）。
+**主动提议**：你为使用者做好一份看起来要给别人看的成果（HTML 页面、报告、PDF、演示稿、Markdown）时，问一句「要不要发成微信里能打开的链接？」—— 使用者同意后再上传，说不用就别再提。这些动作全部通过「活页」（`https://space.24haowan.com`）的 MCP 工具完成，**不要**用别的方式替代（不要把文件直接贴给客户、不要自己拼链接）。
 
 **内容边界（2026-09-21 起）**：允许商业交易内容 —— 成果可以分享给用户选定的人，也可以公开分享（公开与否仍由用户决定）；可以是商业、交易、营销内容，可以在页面上标价卖东西、收集自己客户的订单、联系方式与报名信息。收款方式由你决定 —— 可以用平台的表单与收款块，也可以在页面上放自己的收款码、报价或第三方支付链接。不得钓鱼（冒充他人、收集他人的账号密码或支付信息）、不得发布违法违规内容。
 
@@ -18,9 +18,9 @@ description: "Use when the user says \"share it to WeChat\", \"send this to WeCh
 - 没接就跳过这一节：别去工具清单里找这几个名字，找不到时客户端会把名字最像的别家工具递给你。
 - 本包正文是 2026-10-19 的静态快照；两者冲突时以工具返回为准。
 
-## 什么时候该用方案空间（比直接「发布为网站」多的三样）
+## 什么时候该用活页（比直接「发布为网站」多的三样）
 
-WorkBuddy 自带「发布为网站」：一条只读链接，只在电脑浏览器里看、够用就用它；**它生成的 `*.app.workbuddy.host` 链接在微信里打不开**（微信内打开提示「请复制链接后在浏览器中访问」），用户要在微信里看或转发到微信群就走方案空间，别说自带链接「微信里能打开」。下面三样是方案空间多出来的，成果需要其中任何一样，就走方案空间；用户有演示稿要上台讲、要知道谁看了、要发到微信群里时，**主动**说出对应那一条。
+WorkBuddy 自带「发布为网站」：一条只读链接，只在电脑浏览器里看、够用就用它；**它生成的 `*.app.workbuddy.host` 链接在微信里打不开**（微信内打开提示「请复制链接后在浏览器中访问」），用户要在微信里看或转发到微信群就走活页，别说自带链接「微信里能打开」。下面三样是活页多出来的，成果需要其中任何一样，就走活页；用户有演示稿要上台讲、要知道谁看了、要发到微信群里时，**主动**说出对应那一条。
 
 1. **演示稿带讲稿，手机跟着电脑翻页。** `kind:"deck"` 的网页演示稿可以把讲稿写进 `manifest.notes[]`（每页一条 `{anchor,text}`，`anchor` = 那一页元素的 id；写在 slide 的 `data-speaker-notes` 上也行，上传助手会剥出来）。发布者打开这一页会多一个「讲稿」按钮：同一台电脑开第二个窗口看提示（它会跟着投屏出去，要提醒），或者**扫码把讲稿开到手机上 —— 电脑翻页手机跟着走，手机翻页电脑也走**；观众永远看不到讲稿，讲的人那台手机也不计入阅读统计。⚠️ deck **不要**配 `render:"inline"`（会在上传校验被拒；inline 档对新版本已停用，不用写）。
 2. **谁看了、看到哪，还能回放。** `get_engagement_summary` 看最近 N 天哪几页被看、跳过哪页、停留多久；`list_sessions` 每次访问一行；`get_session_timeline` 逐步时间线 —— 网页成果默认录制画面、带 `replay_url` 可回放（输入内容遮罩，`set_replay` 可按成果关掉）；巡检与扫描器的访问自动剔除。用户问「他看了没」「看到哪」就走这里，只说事实，不说意向。
@@ -30,19 +30,19 @@ WorkBuddy 自带「发布为网站」：一条只读链接，只在电脑浏览�
 
 ## 一、接入（人做一次，AI 之后直接用）
 
-方案空间是一台**需要登录**的 MCP 服务（它要以使用者的身份发布方案）。端点只有一个：`https://space.24haowan.com/mcp`（Streamable HTTP，标准 MCP OAuth）——不带任何 header 填进去，首次调用工具时客户端会打开浏览器，用微信扫码登录、点「允许」即接入；令牌 30 天有效、自动续期，可在管理台「API Token」页撤销。按使用者手上的客户端挑一条：
+活页是一台**需要登录**的 MCP 服务（它要以使用者的身份发布方案）。端点只有一个：`https://space.24haowan.com/mcp`（Streamable HTTP，标准 MCP OAuth）——不带任何 header 填进去，首次调用工具时客户端会打开浏览器，用微信扫码登录、点「允许」即接入；令牌 30 天有效、自动续期，可在管理台「API Token」页撤销。按使用者手上的客户端挑一条：
 
 - **腾讯 CodeBuddy Code**（终端）：`codebuddy mcp add --scope user --transport http space https://space.24haowan.com/mcp` —— 不带 header，首次调用工具时按提示在浏览器完成授权。不想敲命令就把下面那段 JSON 写进 `~/.codebuddy/.mcp.json`（只给某个项目用则写项目根目录的 `.mcp.json`）；CodeBuddy IDE 的「MCP 服务器 → 配置」是同一写法，`type` 填 `http`。
 - **Claude Code**：`claude mcp add --transport http space https://space.24haowan.com/mcp` —— 同样不带 header，首次调用工具时弹浏览器授权。
 - **装成技能 / 插件**（正文就是这一份，任何支持 Agent Skills 的客户端都能装）：`npx skills add GuangZhouShanyouGame/livepage-plugin`（skills.sh）；Claude Code 也可以 `claude plugin marketplace add GuangZhouShanyouGame/livepage-plugin` 再 `claude plugin install livepage@livepage`；Gemini CLI：`gemini extensions install https://github.com/GuangZhouShanyouGame/livepage-plugin`。装的是同一个公开仓，连的还是上面那一个地址。
-- **腾讯 WorkBuddy**：连接器市场里搜「方案空间」（市场名「24好玩 · 方案空间」）安装，不用填地址；首次调用会弹出授权页，微信扫码、点「允许」即接入。连不上就用下面的 API Token 写法，`type` 填 `streamableHttp`。
+- **腾讯 WorkBuddy**：连接器市场里搜「活页」安装，不用填地址；首次调用会弹出授权页，微信扫码、点「允许」即接入。连不上就用下面的 API Token 写法，`type` 填 `streamableHttp`。
 - **其他支持远程 MCP 的客户端**（Codex / Cherry Studio 等）：在「MCP 服务器 → 添加」里选 Streamable HTTP、填上面的地址、不填请求头，客户端会走同一套 OAuth。客户端不支持登录授权、或没有浏览器时改用 API Token：在 `https://space.24haowan.com/app` 微信扫码登录 → 「API Token」→ 创建 → 把 token 填进客户端的请求头 `Authorization: Bearer sk-space-…`。JSON 写法（走 OAuth 就把 `headers` 整段删掉；`type` 各家不同：CodeBuddy 用 `http`，WorkBuddy / Cherry Studio 一类用 `streamableHttp`）：
 
 ```json
 { "mcpServers": { "space": { "type": "http", "url": "https://space.24haowan.com/mcp", "headers": { "Authorization": "Bearer sk-space-…" } } } }
 ```
 
-**已在线上接入过的客户端**（按方案空间后台的客户端登记，2026-09-20）：CodeBuddy Code、WorkBuddy、Claude Code、Codex。判据不是名字，是「支持带登录的远程 MCP」——没列到的客户端只要支持 Streamable HTTP + OAuth（或能填请求头）就能接。
+**已在线上接入过的客户端**（按活页后台的客户端登记，2026-09-20）：CodeBuddy Code、WorkBuddy、Claude Code、Codex。判据不是名字，是「支持带登录的远程 MCP」——没列到的客户端只要支持 Streamable HTTP + OAuth（或能填请求头）就能接。
 
 **使用者有多个工作区时，先切换再授权**：授权页上「接入的工作区」就是使用者在网页上当前所在的那一个，页面上不能改选。要连另一个就让使用者先打开 `https://space.24haowan.com/app/workspaces` 切换到它，再重新发起连接。每个工作区各是一次独立的授权 —— 再连一个不会替换已有的连接，两边同时连着、各自撤销。
 
@@ -92,18 +92,18 @@ WorkBuddy 自带「发布为网站」：一条只读链接，只在电脑浏览�
 
 ## 托管契约：网页怎么写，发上来就怎么跑
 
-方案空间是托管服务，不是另一套写法（完整说法：`https://space.24haowan.com/for-agents.md` 的「托管契约」一节，与本节冲突时以它为准）。
+活页是托管服务，不是另一套写法（完整说法：`https://space.24haowan.com/for-agents.md` 的「托管契约」一节，与本节冲突时以它为准）。
 
 - **包 = 一个目录**，入口 `index.html`，相对路径原样可用；发布后跑在工作区自己的子域名 `<工作区>.hy.24haowan.com` 上。
 - **常见网页写法默认都能用**：网上的脚本 / 样式 / 图片 / 字体（CDN 上的 echarts、tailwind 照常加载）、`fetch` / WebSocket 调外部接口、嵌外部 iframe（视频、地图、问卷）、普通 `<form>`、`alert` / `confirm` / `print`、本地存储、摄像头与定位。页面连什么、收什么由使用者决定；回执里的 `external_origins` / `external_form` 只是说明，不用改。
 - **读写数据用最普通的写法**：读 `fetch('./_data/表名.json')`（行对象数组，修订号在响应头 `X-Space-Revision`；线上没这张表就回落包里同名文件）；写 `POST ./_data/表名`（JSON ⇒ `201 {id, status}`；普通表单 ⇒ `303` 回原页带 `?space_submitted=表名`；没开写回 ⇒ `403 append_closed`）。只追加。
-- **方案空间只在页面上加一行**：每个 HTML 的 `<head>` 里多一行 `<script data-space-sdk src="/_space/sdk.js">`（阅读统计、录制、站外链接新窗口、deck 引擎），其余字节原样；`read_version` 读回的就是读者拿到的字节。
+- **活页只在页面上加一行**：每个 HTML 的 `<head>` 里多一行 `<script data-space-sdk src="/_space/sdk.js">`（阅读统计、录制、站外链接新窗口、deck 引擎），其余字节原样；`read_version` 读回的就是读者拿到的字节。
 - **本地先试**：`curl -sSO https://space.24haowan.com/cli/space.mjs` 后 `node space.mjs serve <目录>`，与线上同一套规则。
 - **仍然不行的**：以 `/` 开头的路径（指向子域名根，改相对路径）、Service Worker、包里的 `_space/` 目录、留在包里的 `data-speaker-notes`。出了事运营把出问题的工作区或页面切回收紧规则，不按域名拦。旧的 SDK `space.data.get` / `space.data.append` 与 `set_form` 表单块继续可用，是可选的。
 
 ## 二、标准流程（每一步就是一个工具）
 
-0. **手上还没有成果、要从零做一页时**：先 `list_examples` 看一眼方案空间自带的样例（周报、方案、演示稿、报名、出行安排、轻应用），照着改比从零编省事；样例只是起点，不拿它冒充用户的成果。
+0. **手上还没有成果、要从零做一页时**：先 `list_examples` 看一眼活页自带的样例（周报、方案、演示稿、报名、出行安排、轻应用），照着改比从零编省事；样例只是起点，不拿它冒充用户的成果。
 1. **建档**：`create_proposal`。**容器是可选的** —— 一次性的东西不传 `folder_id` 就落在根目录；要按客户/项目分组先 `list_folders` 看有没有现成的，没有再 `create_folder`。**已经发过的成果别重建**：`list_proposals` 每行带 `current_version_id` 与 `pending_version` / `held_version`，历史版本用 `list_versions`（成果号不是版本号）。（「先建客户、再建商机」那条老动线已于 2026-09-15 **退役**，那两个工具都已删除，别去工具清单里找。）
 2. **上传**。
    **最常见的那一把是直接发布**：没有终端、要发的是一份 HTML / Markdown（或网页连同几个文字文件，合计 2 MB 以内）⇒ `publish_file`，把文本内容交进来，一次调用就发上去。PDF / PPTX / 图片 / 大文件没终端时用 `create_upload_link`。完整判法按下面这棵树：
@@ -165,9 +165,9 @@ WorkBuddy 自带「发布为网站」：一条只读链接，只在电脑浏览�
 - 处理完 → `set_feedback_status`（confirmed / disputed / resolved）。
 - 改稿出 V2：回到第二步 push（同一个 proposal），原链接自动切到新版本，旧评论仍绑旧版本。
 
-### 把建议告诉方案空间（给方案空间团队，不是给某份成果）
+### 把建议告诉活页（给活页团队，不是给某份成果）
 
-- **只在三种时刻主动问一句**「要不要我把这个转给方案空间团队？」：使用者**明确表达**了对方案空间的不满或需求（「这个不好用」「能不能加个…」）；工具**刚报错或拒收**（校验失败、审核被拒、超出上限、被限频）；发布结果里带了 `feedback_hint` 或兼容提醒 `compat_notes`。
+- **只在三种时刻主动问一句**「要不要我把这个转给活页团队？」：使用者**明确表达**了对活页的不满或需求（「这个不好用」「能不能加个…」）；工具**刚报错或拒收**（校验失败、审核被拒、超出上限、被限频）；发布结果里带了 `feedback_hint` 或兼容提醒 `compat_notes`。
 - **其余时候别问**：发布成功、查阅读数据、改稿、接入验证时都不问。同一个工作区 24 小时内最多问一次；使用者说不用就别再提。
 - **先给使用者看草稿**：把他的原意写成一两句给他看，**使用者同意后**才调 `send_feedback_to_livepage`（传 `user_confirmed: true`；看到 `feedback_hint` 才提的另传 `source: "hint"`）。他改了按他改的发，不同意就不发。
 - 用的哪个 Agent、哪一页、刚才哪一步出的错平台自动带上；**别**把页面正文、读者信息、令牌写进 `text`，也不替使用者编意见。
