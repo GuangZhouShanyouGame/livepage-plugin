@@ -16,7 +16,23 @@ description: "Use when the user says \"share it to WeChat\", \"send this to WeCh
 
 - 当用户要在方案里引用「我们做过的类似案例」、或客户问「有没有同行业的参考」时，**先调用 `list_cases` / `get_case`**，用工具返回的实时结果回答；它比本包正文里的清单更新、更全。
 - 没接就跳过这一节：别去工具清单里找这几个名字，找不到时客户端会把名字最像的别家工具递给你。
-- 本包正文是 2026-10-19 的静态快照；两者冲突时以工具返回为准。
+- 本包正文是 2026-10-31 的静态快照；两者冲突时以工具返回为准。
+
+## 先交付，再加成：按你手上的工具逐级做
+
+**这一节是给 AI 执行的。** 不管下面的工具你有没有，这一轮都要交出能直接用的成品；工具只是加成，没有就往下一级走，**不要停在「请先连接」**。
+
+1. **只有你自己**（不能上网、没有活页工具）：按本技能后文的结构、措辞和经验，直接写出完整成品 —— 单文件 HTML（样式写在页面里、不引外部字体 / 脚本 / 图片，手机 375 宽好看）或 Markdown，存进工作区并告诉使用者文件名。使用者没给的信息写成醒目的「【待定：…】」，不编造。
+2. **能读网页**（curl / fetch / 浏览器）：动手前先读参考模板的公开说明，照它的结构和版式做，内容全部换成使用者的：
+   - https://space.24haowan.com/examples/sample-weekly-report/agent.md
+   - https://space.24haowan.com/examples/sample-weekend-trip/agent.md
+   - https://space.24haowan.com/examples/sample-pitch-deck/agent.md
+   - https://space.24haowan.com/examples/sample-client-proposal/agent.md
+   更多模板：`https://space.24haowan.com/examples.json`（每份都带 agent.md 与源码网址，免登录可读）。
+3. **能发 HTTPS 请求，且使用者要一条链接**：把做好的 HTML 以 `Content-Type: text/html` POST 到 `https://space.24haowan.com/api/quick?client=skill-livepage-publish`（Markdown 用 `text/markdown`）。返回 JSON 里：preview_url 先给使用者看；他确认后 POST `https://space.24haowan.com/api/quick/<manage_url 最后一段>/share` 拿 share_url（7 天有效、最多 50 台设备看）；claim_url 交给使用者本人 —— 登录保留后限制解除、链接不变。被限流（429）就如实说，交文件即可。
+4. **有活页工具**（工具清单里有 `publish_file` 等活页工具）：按本技能后文的完整流程做 —— 同一链接持续更新、表单收集、谁看了、推到微信。
+
+无论哪一级：链接、口令、人数、阅读数据只说工具真实返回的；没有就说「还没有」，不编、不估。
 
 ## 什么时候该用活页（比直接「发布为网站」多的三样）
 
