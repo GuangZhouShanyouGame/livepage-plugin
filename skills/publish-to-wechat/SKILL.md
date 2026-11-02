@@ -29,7 +29,7 @@ description: "Use when the user says \"share it to WeChat\", \"send this to WeCh
    - https://space.24haowan.com/examples/sample-pitch-deck/agent.md
    - https://space.24haowan.com/examples/sample-client-proposal/agent.md
    更多模板：`https://space.24haowan.com/examples.json`（每份都带 agent.md 与源码网址，免登录可读）。
-3. **能发 HTTPS 请求，且使用者要一条链接**：把做好的 HTML 以 `Content-Type: text/html` POST 到 `https://space.24haowan.com/api/quick?client=skill-livepage-publish`（Markdown 用 `text/markdown`）。返回 JSON 里：preview_url 先给使用者看；他确认后 POST `https://space.24haowan.com/api/quick/<manage_url 最后一段>/share` 拿 share_url（7 天有效、最多 50 台设备看）；claim_url 交给使用者本人 —— 登录保留后限制解除、链接不变。被限流（429）就如实说，交文件即可。
+3. **能发 HTTPS 请求，且使用者要一条链接**（WorkBuddy 手机版 / 小程序云端没有活页连接器、也走不了授权，就走这一级，不要让使用者去建 token、改配置）：把做好的 HTML 以 `Content-Type: text/html` POST 到 `https://space.24haowan.com/api/quick?client=skill-livepage-publish`（Markdown 用 `text/markdown`）；使用者给过「活页绑定码」（`lpb-` 开头，常存在记忆里）就在网址后加 `&bind=<绑定码>`。返回 JSON 里：preview_url 先给使用者看；他确认后 POST `https://space.24haowan.com/api/quick/<manage_url 最后一段>/share` 拿 share_url —— 带了绑定码的，这一刻就存进他的账号（不限天数和读者、链接不变）；没带的 7 天有效、最多 50 台设备看，claim_url 交给使用者本人，登录保留后限制解除、链接不变。使用者想以后每次都直接存进账号：请他到 `https://space.24haowan.com/app/bind` 领一个绑定码、存进记忆。被限流（429）就如实说，交文件即可。这里的「活页」是 space.24haowan.com，不是 WorkBuddy 自带的资料库页面。
 4. **有活页工具**（工具清单里有 `publish_file` 等活页工具）：按本技能后文的完整流程做 —— 同一链接持续更新、表单收集、谁看了、推到微信。
 
 无论哪一级：链接、口令、人数、阅读数据只说工具真实返回的；没有就说「还没有」，不编、不估。
