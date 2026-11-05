@@ -172,6 +172,7 @@ WorkBuddy 自带「发布为网站」：一条只读链接，只在电脑浏览�
    2. **没有终端，要发的是文字文件**（一个 HTML / Markdown，或网页连同它的 css / js / json / svg 等几个文字文件，合计 2 MB 以内）⇒ `publish_file`，把文本内容直接交进来。
    3. **其它情况，或者拿不准** ⇒ `create_upload_link`：把返回的上传网页原样交给用户，用户在手机（微信里也行）或电脑上自己选文件（PDF / PPTX / 图片 / 大文件都行），你每 15–30 秒用 `get_version` 查一次结果。
    `create_upload_session` 不是第四条路，是上传助手自己调的一步：没有终端就别建会话 —— 预签名地址你传不上去，版本会永远停在 `uploading`。
+   - 走第 2 条时：单个文件的 `filename` **只写文件名**、不带目录，只收 `.html` / `.htm` / `.md`，内容不能为空；多个文件用 `files[{path, content}]`，不止一个页面时 `manifest.entry` 写入口。回 `invalid_files` 就按 `issues` 里每一条的 fix 改，别原样重试。`create_upload_session` 回 `upload_route` 时直接改用 `publish_file` 或 `create_upload_link`。
    - 走第 2 条时：页面用到的图片只能内联进文字（data URI），内联前先转 WebP、长边 ≤ 1600px；之后的校验、审核与生效规则和 `finalize_upload` 完全相同；用户还没确认对外就传 `hold: true`。
    - 走第 3 条时：链接 2 小时内有效、只能成功用一次、只能往这一份成果里传、默认先不对外。
 
