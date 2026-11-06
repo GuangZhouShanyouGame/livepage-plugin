@@ -34,50 +34,6 @@ description: "Use when the user says \"share it to WeChat\", \"send this to WeCh
 
 无论哪一级：链接、口令、人数、阅读数据只说工具真实返回的；没有就说「还没有」，不编、不估。
 
-## 工具名对照：连的是新版（v2）活页工具时
-
-活页 MCP 有新旧两套工具名，能力完全一样。**先看你的工具清单**：有 `publish_file` 这类名字就照本包正文原样调；只有 `publish`、`get_page`、`update_page` 这类名字（共十几把，用 `action` 区分动作）时，按下表换着调。两处参数统一改名：`proposal_id` 叫 `page_id`，`manifest` 叫 `page`；其余参数不变。
-
-| 正文里的工具 | 新版怎么调 |
-| --- | --- |
-| `publish_file` | `publish`，action=`file` |
-| `get_engagement_summary` | `insights`，action=`summary` |
-| `list_sessions` | `insights`，action=`sessions` |
-| `get_session_timeline` | `insights`，action=`timeline` |
-| `set_replay` | `update_page`，`analytics: { replay: 原来的 on }` |
-| `list_proposals` | `list_pages` |
-| `get_version` | `get_page` |
-| `list_versions` | `get_page`，action=`versions` |
-| `publish_version` | `release`，action=`publish` |
-| `set_visibility` | `share`，action=`visibility` |
-| `push_to_wechat` | `notify`，action=`push` |
-| `set_form` | `update_page`，`forms: { <表名>: 其余参数 }` |
-| `set_payment_qr` | `workspace`，action=`set_payment_qr`，原来的参数放进 `args` |
-| `set_data` | `update_page`，其余参数放进 `data` |
-| `list_data_rows` | `responses`，action=`rows` |
-| `list_examples` | `examples`，action=`list` |
-| `read_version` | `get_page`，action=`read` |
-| `create_proposal` | `publish`，action=`create_page` |
-| `list_folders` | `list_pages`，action=`folders` |
-| `create_folder` | `workspace`，action=`create_folder`，原来的参数放进 `args` |
-| `create_upload_link` | `publish`，action=`upload_link` |
-| `create_cli_token` | `publish`，action=`cli_token` |
-| `create_upload_session` | `publish`，action=`session`，参数 `files` 改叫 `upload_files` |
-| `finalize_upload` | `publish`，action=`complete` |
-| `preview_version` | `preview` |
-| `reset_default_link` | `share`，action=`reset_link` |
-| `revoke_share_link` | `share`，action=`revoke_link` |
-| `list_feedback` | `responses`，action=`feedback` |
-| `add_external_feedback` | `handle_response`，action=`add_feedback` |
-| `set_feedback_status` | `handle_response`，action=`set_status` |
-| `send_feedback_to_livepage` | `workspace`，action=`send_feedback_to_livepage`，原来的参数放进 `args` |
-| `list_my_feedback` | `workspace`，action=`list_my_feedback`，原来的参数放进 `args` |
-| `set_workspace_profile` | `workspace`，action=`set_workspace_profile`，原来的参数放进 `args` |
-| `get_downloads` | `get_page`，action=`downloads` |
-| `set_downloads` | `update_page`，原来的参数放进 `downloads`（`version_id` 可省，缺省当前版本） |
-| `preview_downloads` | `publish`，action=`check_downloads` |
-| `get_data` | `get_page`，action=`data` |
-
 ## 什么时候该用活页（比直接「发布为网站」多的三样）
 
 WorkBuddy 自带「发布为网站」：一条只读链接，只在电脑浏览器里看、够用就用它；**它生成的 `*.app.workbuddy.host` 链接在微信里打不开**（微信内打开提示「请复制链接后在浏览器中访问」），用户要在微信里看或转发到微信群就走活页，别说自带链接「微信里能打开」。下面三样是活页多出来的，成果需要其中任何一样，就走活页；用户有演示稿要上台讲、要知道谁看了、要发到微信群里时，**主动**说出对应那一条。
@@ -282,3 +238,49 @@ WorkBuddy 自带「发布为网站」：一条只读链接，只在电脑浏览�
 - **页面取数用最普通的 `fetch`**（#8654 起）：`fetch('./_data/表名.json')` 拿到行对象数组（底表 + 过审的读者写回；发布者自己看还会多出待审的行），修订号在响应头 `X-Space-Revision`；读权限就是方案可见性，无权限是 403 不是空数组。线上没有这张表时回落包里同名的 `_data/表名.json` ⇒ 本地放一份示例数据、`node space.mjs serve` 就能跑。只改表不重传页面，读者刷新即见新数据。旧的 SDK 写法 `space.data.get('表名')`（回 `{columns, rows, revision}`）继续可用，是可选的兼容层。
 - **读者写回（报名 / 打卡 / 投票 / 意见收集，#7624 起）**：页面往同一张表写一行 —— 普通表单 `<form action="./_data/表名" method="post">`，或 `fetch('./_data/表名', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({列: 值})})`（旧 SDK `space.data.append('表名', {列: 值})` 同一件事）—— **默认关、按表开**：`set_data` 传 `append_open=true`（单独传只翻开关、不动底表，仍要带 revision）。写回限频（每张表每小时 600 行、每台设备 30 行）、每行不超过 2000 字 / 单格 500 字、每表最多 5000 行；文字先过审：过审的行其他读者刷新即见，审核命中的行只有发布者看得到，审核不可用时写回被拒（页面收到「稍后再试」）而不是先收下。关着时写口回 `403`、`code` 为 `append_closed`（SDK 则 reject 同一个 `err.code`），页面要把原因给读者看、别假装「已提交」。写回的行**不在** `get_data` 的 rows 里、也不会被 `set_data` 覆盖，用 `list_data_rows` 读回（可按表 / 状态过滤，带设备、时刻、写回时的页面版本与数据修订；只有设备与时刻，不认人、别据此推断意愿）；要并进底表就读回后 `set_data` 整表替换。写回只对读得到这份内容的设备开放（private / 口令与页面同口径），重置默认链接后旧链接的写回一并失效；每次写回都进访问时间线（`get_session_timeline` 里是「写回」）。预览台、讲解人与发布者自己的会话不提交。
 - **一等公民表单 / 订单块（报名 / 订货 / 预约 / 留资，#8273 起）**：页面上一行表单代码都不想写时用它（自己写普通 `<form>` 同样可以）—— `set_form` 只定义字段（最多 20 个，六种类型：text / textarea / select / multiselect / number / phone），平台在查看页里把它渲染成手机上能填、带校验的表单，提交的行落到同一张数据表、用 `list_data_rows` 读回（每行带 _form_rev；审核、限频、held 与上面那条一样）。可选 amount 只显示金额（单价 × 数量由平台算、写进每行的 _amount_cents），不收钱。幂等：再调一次就是改字段，已收的行保留；写回默认打开，传 `append_open=false` 关掉。页面不用重发。
+
+## 附录 · 工具名对照：连的是新版（v2）活页工具时
+
+**附录，只在需要时读**：你的工具清单里有活页工具、而且名字是 `publish` / `get_page` 这一套时才用得上；没有活页工具就跳过本节，照上面「先交付」把成品直接交给使用者。
+
+活页 MCP 有新旧两套工具名，能力完全一样。**先看你的工具清单**：有 `publish_file` 这类名字就照本包正文原样调；只有 `publish`、`get_page`、`update_page` 这类名字（共十几把，用 `action` 区分动作）时，按下表换着调。两处参数统一改名：`proposal_id` 叫 `page_id`，`manifest` 叫 `page`；其余参数不变。
+
+| 正文里的工具 | 新版怎么调 |
+| --- | --- |
+| `publish_file` | `publish`，action=`file` |
+| `get_engagement_summary` | `insights`，action=`summary` |
+| `list_sessions` | `insights`，action=`sessions` |
+| `get_session_timeline` | `insights`，action=`timeline` |
+| `set_replay` | `update_page`，`analytics: { replay: 原来的 on }` |
+| `list_proposals` | `list_pages` |
+| `get_version` | `get_page` |
+| `list_versions` | `get_page`，action=`versions` |
+| `publish_version` | `release`，action=`publish` |
+| `set_visibility` | `share`，action=`visibility` |
+| `push_to_wechat` | `notify`，action=`push` |
+| `set_form` | `update_page`，`forms: { <表名>: 其余参数 }` |
+| `set_payment_qr` | `workspace`，action=`set_payment_qr`，原来的参数放进 `args` |
+| `set_data` | `update_page`，其余参数放进 `data` |
+| `list_data_rows` | `responses`，action=`rows` |
+| `list_examples` | `examples`，action=`list` |
+| `read_version` | `get_page`，action=`read` |
+| `create_proposal` | `publish`，action=`create_page` |
+| `list_folders` | `list_pages`，action=`folders` |
+| `create_folder` | `workspace`，action=`create_folder`，原来的参数放进 `args` |
+| `create_upload_link` | `publish`，action=`upload_link` |
+| `create_cli_token` | `publish`，action=`cli_token` |
+| `create_upload_session` | `publish`，action=`session`，参数 `files` 改叫 `upload_files` |
+| `finalize_upload` | `publish`，action=`complete` |
+| `preview_version` | `preview` |
+| `reset_default_link` | `share`，action=`reset_link` |
+| `revoke_share_link` | `share`，action=`revoke_link` |
+| `list_feedback` | `responses`，action=`feedback` |
+| `add_external_feedback` | `handle_response`，action=`add_feedback` |
+| `set_feedback_status` | `handle_response`，action=`set_status` |
+| `send_feedback_to_livepage` | `workspace`，action=`send_feedback_to_livepage`，原来的参数放进 `args` |
+| `list_my_feedback` | `workspace`，action=`list_my_feedback`，原来的参数放进 `args` |
+| `set_workspace_profile` | `workspace`，action=`set_workspace_profile`，原来的参数放进 `args` |
+| `get_downloads` | `get_page`，action=`downloads` |
+| `set_downloads` | `update_page`，原来的参数放进 `downloads`（`version_id` 可省，缺省当前版本） |
+| `preview_downloads` | `publish`，action=`check_downloads` |
+| `get_data` | `get_page`，action=`data` |
