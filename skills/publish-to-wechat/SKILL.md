@@ -81,9 +81,9 @@ WorkBuddy 自带「发布为网站」：一条只读链接，只在电脑浏览�
 **六步走完才叫「已分享」**，每一步把真实状态和下一步告诉使用者：
 1. **选成果**：`list_proposals` 先看有没有现成的（更新就复用 proposal_id），没有再新建。**换了会话、手里什么都没有时也走这条**：它每行带 `current_version_id`（客户现在看到的那一版），拿着它就能直接 `get_version` 查状态、按第 4 步预览；要翻历史版本或回滚用 `list_versions`。成果号不是版本号 —— 拿 `proposal_id` 调 `get_version` 会 `not_found`。
    **先看这一行有没有 `pending_version` / `held_version`**：前者是还没发完的那一版（停在上传 / 转换 / 审核），后者是已过审但被 hold 按着、还没成为客户可见版的那一版。有就**接着处理那一版**（第 3–4 步），别当成「没发过」再建一份。
-2. 上传走哪条路：有终端 ⇒ space-cli（先 create_cli_token）；没终端、文字文件合计 ≤ 2 MB ⇒ publish_file；其它或拿不准 ⇒ create_upload_link。校验失败按 issues 修正后重传；使用者还没确认就带 hold。
+2. 上传走哪条路：有终端 ⇒ space-cli（先 create_cli_token）；没终端、文字文件合计 ≤ 2 MB ⇒ publish_file；其它或拿不准 ⇒ create_upload_link。校验失败按 issues 修正后重传。页面已对外（口令 / 公开 / 文件夹链接 / 具名链接）、使用者还没确认这一版时才带 hold；只有工作区成员能打开的页面（新页面默认如此）不用 hold —— 传了也不生效，过审直接成为当前版本、不提醒任何人。
 3. **等可用版本**：`get_version` —— `converting` = 还在转逐页图，稍后再查；`moderating` = 审核暂时不可用，稍后重新 finalize 一次；`review` = 命中规则等人工复核，在那之前别人看不到这一版；`preview_ready` 或带 hold 的 `published` = 可预览、待确认。
-4. **预览**：把预览链接给使用者看；确认后 hold 版才 `publish_version`。
+4. **预览**：把链接给使用者看。带 hold 暂存的版本确认后才 `publish_version`；没暂存的（只有工作区成员能打开的页）已经是当前版本，使用者看过、说好给谁看之后直接 `set_visibility`。
 5. **确认访问范围**：使用者点头后 `set_visibility`：家人、朋友、同事用 `passcode`；`public` 只在使用者明确要求时。把默认链接（和口令）交给使用者。
 6. **手机打开**：使用者在电脑上时，把发布回执里的 `push_qr_url` 当图片给他 —— 微信扫一下，这一页就发到他自己的微信（服务号「二四 活页」，第一次顺带关注）；他在电脑上打开这条链接时，右下角也有「发到微信」，点开扫一下一样。没有 `push_qr_url` 就直接打开返回的 `card_url` 用微信扫码。之后从微信里点右上角转发。使用者说「发到我微信」就调 `push_to_wechat`。使用者在手机上就把链接直接发到微信。讲稿遥控的二维码是另一件事（只给讲的人），别混用。
 
@@ -129,7 +129,7 @@ WorkBuddy 自带「发布为网站」：一条只读链接，只在电脑浏览�
    3. **其它情况，或者拿不准** ⇒ `create_upload_link`：把返回的上传网页原样交给用户，用户在手机（微信里也行）或电脑上自己选文件（PDF / PPTX / 图片 / 大文件都行），你每 15–30 秒用 `get_version` 查一次结果。
    `create_upload_session` 不是第四条路，是上传助手自己调的一步：没有终端就别建会话 —— 预签名地址你传不上去，版本会永远停在 `uploading`。
    - 走第 2 条时：单个文件的 `filename` **只写文件名**、不带目录，只收 `.html` / `.htm` / `.md`，内容不能为空；多个文件用 `files[{path, content}]`，不止一个页面时 `manifest.entry` 写入口。回 `invalid_files` 就按 `issues` 里每一条的 fix 改，别原样重试。`create_upload_session` 回 `upload_route` 时直接改用 `publish_file` 或 `create_upload_link`。
-   - 走第 2 条时：页面用到的图片只能内联进文字（data URI），内联前先转 WebP、长边 ≤ 1600px；之后的校验、审核与生效规则和 `finalize_upload` 完全相同；用户还没确认对外就传 `hold: true`。
+   - 走第 2 条时：页面用到的图片只能内联进文字（data URI），内联前先转 WebP、长边 ≤ 1600px；之后的校验、审核与生效规则和 `finalize_upload` 完全相同；页面已对外、用户还没确认这一版时传 `hold: true`（只有工作区成员能打开的页上不生效）。
    - 走第 3 条时：链接 2 小时内有效、只能成功用一次、只能往这一份成果里传、默认先不对外。
 
    第 1 条（本地上传助手）怎么跑：
@@ -224,7 +224,7 @@ WorkBuddy 自带「发布为网站」：一条只读链接，只在电脑浏览�
 - source 为 null 表示不提供正文原文件；需要时填同样的文件对象，path 必须是本次正文入口（Markdown 指源 .md）。附件数组顺序就是展示顺序；每项 label 必填。格式和大小取实际文件，downloadName 必须保留原扩展名。showFilename 默认 false；只有明确开启才展示原文件名。旧版保存新配置前保持原有名称。
 - MCP `get_downloads` 读取清单、可选文件和 revision；`set_downloads` 带 version_id、revision 和完整 config 保存。只读成员不能修改。遇到冲突先重新读取并核对，不盲目覆盖。enabled=false 同时关闭入口与下载地址，保留选项。
 - CLI v3：push 可加 `--downloads downloads.json`；配置文件或 `--manifest` 文件本身不上传。读取用 `node space.mjs downloads --version <id>`；修改用 `node space.mjs downloads --version <id> --config downloads.json --revision <读到的修订号>`。所有命令沿用 SPACE_TOKEN。
-- CLI push 在提交前列出材料新增、移除、同路径文件替换和缺失；缺失会阻止提交。手工 MCP 上传在 create_upload_session 后用 `preview_downloads`，把返回的 basis 交给 finalize_upload 的 download_basis。路径不会模糊重配；目录改名应明确更新清单。需要人工看完再生效时用 --hold。
+- CLI push 在提交前列出材料新增、移除、同路径文件替换和缺失；缺失会阻止提交。手工 MCP 上传在 create_upload_session 后用 `preview_downloads`，把返回的 basis 交给 finalize_upload 的 download_basis。路径不会模糊重配；目录改名应明确更新清单。需要人工看完再替换对外版本时用 --hold（只对已对外的页面生效）。
 - Web 在成果详情的「下载材料」里编辑，也可按版本查看与生效版的差异。当前版保存即应用；其他版本的设置随各自版本使用。单份直接下载，多份打开有名称、说明、格式和大小的清单。新配置的下载入口独立于「更多」。
 - 不做服务器 HTML 转 PDF，也不打 ZIP：HTML 原文件只含入口文件；完整讲义应先本机导出 PDF 再随包上传、加入清单。渲染所需资源仍可被浏览器读取，下载设置不是防复制措施。
 
