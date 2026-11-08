@@ -29,8 +29,8 @@ description: "Use when the user says \"share it to WeChat\", \"send this to WeCh
    - https://space.24haowan.com/examples/sample-pitch-deck/agent.md
    - https://space.24haowan.com/examples/sample-client-proposal/agent.md
    更多模板：`https://space.24haowan.com/examples.json`（每份都带 agent.md 与源码网址，免登录可读）。
-3. **能发 HTTPS 请求，且使用者要一条链接**（WorkBuddy 手机版 / 小程序云端没有活页连接器、也走不了授权，就走这一级，不要让使用者去建 token、改配置）：把做好的 HTML 以 `Content-Type: text/html` POST 到 `https://space.24haowan.com/api/quick?client=skill-livepage-publish`（Markdown 用 `text/markdown`）；使用者给过「活页绑定码」（`lpb-` 开头，常存在记忆里）就在网址后加 `&bind=<绑定码>`。返回 JSON 里：preview_url 先给使用者看；他确认后 POST `https://space.24haowan.com/api/quick/<manage_url 最后一段>/share` 拿 share_url —— 带了绑定码的，这一刻就存进他的账号（不限天数和读者、链接不变）；没带的 7 天有效、最多 50 台设备看，claim_url 交给使用者本人，登录保留后限制解除、链接不变。使用者想以后每次都直接存进账号：请他到 `https://space.24haowan.com/app/bind` 领一个绑定码、存进记忆。被限流（429）就如实说，交文件即可。这里的「活页」是 space.24haowan.com，不是 WorkBuddy 自带的资料库页面。
-4. **有活页工具**（工具清单里有 `publish_file` 等活页工具）：按本技能后文的完整流程做 —— 同一链接持续更新、表单收集、谁看了、推到微信。
+3. **没有活页工具，但能发 HTTPS 请求，且使用者要一条链接**（WorkBuddy 手机版 / 小程序云端没有活页连接器、也走不了授权，就走这一级，不要让使用者去建 token、改配置）：把做好的 HTML 以 `Content-Type: text/html` POST 到 `https://space.24haowan.com/api/quick?client=skill-livepage-publish`（Markdown 用 `text/markdown`）；使用者给过「活页绑定码」（`lpb-` 开头，常存在记忆里）就在网址后加 `&bind=<绑定码>`。返回 JSON 里：preview_url 先给使用者看；他确认后 POST `https://space.24haowan.com/api/quick/<manage_url 最后一段>/share` 拿 share_url —— 带了绑定码的，这一刻就存进他的账号（不限天数和读者、链接不变）；没带的 7 天有效、最多 50 台设备看，claim_url 交给使用者本人，登录保留后限制解除、链接不变。使用者想以后每次都直接存进账号：请他到 `https://space.24haowan.com/app/bind` 领一个绑定码、存进记忆。被限流（429）就如实说，交文件即可。这里的「活页」是 space.24haowan.com，不是 WorkBuddy 自带的资料库页面。
+4. **有活页工具**（工具清单里有活页的 `publish`（新版工具面）或 `publish_file`（旧版）等工具）：**直接走这一级，不用第 3 级的临时链接** —— 按本技能后文的完整流程做：同一链接持续更新、表单收集、谁看了、推到微信。
 
 无论哪一级：链接、口令、人数、阅读数据只说工具真实返回的；没有就说「还没有」，不编、不估。
 
@@ -194,7 +194,7 @@ WorkBuddy 自带「发布为网站」：一条只读链接，只在电脑浏览�
 ## 四、纪律
 
 - 平台不生成内容：方案由你或使用者产出、由使用者确认后才发布。
-- 一份成果只有那一条链接：给家人、朋友或一群同事看就 `set_visibility passcode`；`public` 只在使用者明确要求公开时才切。放开可见性必须使用者明确确认，不公开张贴链接。
+- 一份成果只有那一条链接：给家人、朋友或一群同事看就用 `set_visibility` 把可见性切成口令可看；`public` 只在使用者明确要求公开时才切。放开可见性必须使用者明确确认，不公开张贴链接。
 - 登录即可发布，**不要**主动让使用者去绑手机号或填工作区资料。只有工具真的返回 `trust_required`（平台按阶段打开门槛时才会出现）时，才按返回里 `fix` 写的那几条补齐：手机号与邀请码去 `https://space.24haowan.com/app/onboarding`，**工作区资料你自己就能填**（`set_workspace_profile`，网页那张表单已退役）。不要找绕路。
 
 ### 不知道网页方案该长什么样？别从零发明
