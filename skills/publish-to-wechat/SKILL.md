@@ -123,7 +123,7 @@ WorkBuddy 自带「发布为网站」：一条只读链接，只在电脑浏览�
 
 活页是托管服务，不是另一套写法（完整说法：`https://space.24haowan.com/for-agents.md` 的「托管契约」一节，与本节冲突时以它为准）。
 
-- **包 = 一个目录**，入口 `index.html`，相对路径原样可用；发布后跑在工作区自己的子域名 `<工作区>.hy.24haowan.com` 上。
+- **包 = 一个目录**，入口 `index.html`，相对路径原样可用；发布后跑在工作区自己的子域名 `<工作区>.24hw.cn` 上。
 - **常见网页写法默认都能用**：网上的脚本 / 样式 / 图片 / 字体（CDN 上的 echarts、tailwind 照常加载）、`fetch` / WebSocket 调外部接口、嵌外部 iframe（视频、地图、问卷）、普通 `<form>`、`alert` / `confirm` / `print`、本地存储、摄像头与定位。页面连什么、收什么由使用者决定；回执里的 `external_origins` / `external_form` 只是说明，不用改。
 - **读写数据用最普通的写法**：读 `fetch('./_data/表名.json')`（行对象数组，修订号在响应头 `X-Space-Revision`；线上没这张表就回落包里同名文件）；写 `POST ./_data/表名`（JSON ⇒ `201 {id, status}`；普通表单 ⇒ `303` 回原页带 `?space_submitted=表名`；没开写回 ⇒ `403 append_closed`）。只追加。
 - **活页只在页面上加一行**：每个 HTML 的 `<head>` 里多一行 `<script data-space-sdk src="/_space/sdk.js">`（阅读统计、录制、站外链接新窗口、deck 引擎），其余字节原样；`read_version` 读回的就是读者拿到的字节。
