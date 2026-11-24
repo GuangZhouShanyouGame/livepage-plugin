@@ -43,17 +43,21 @@ description: "Use when the user says \"share it to WeChat\", \"send this to WeCh
    - https://space.24haowan.com/examples/sample-client-proposal/agent.md
    更多模板：`https://space.24haowan.com/examples.json`（每份都带 agent.md 与源码网址，免登录可读）。
 3. **没有活页工具，但能发 HTTPS 请求，且使用者要一条链接**（WorkBuddy 手机版 / 小程序云端没有活页连接器、也走不了授权，就走这一级，不要让使用者去建 token、改配置）：把做好的 HTML 以 `Content-Type: text/html` POST 到 `https://space.24haowan.com/api/quick?client=skill-livepage-publish`（Markdown 用 `text/markdown`）；使用者给过「活页绑定码」（`lpb-` 开头，常存在记忆里）就在网址后加 `&bind=<绑定码>`。返回 JSON 里：preview_url 先给使用者看；他确认后 POST `https://space.24haowan.com/api/quick/<manage_url 最后一段>/share` 拿 share_url —— 带了绑定码的，这一刻就存进他的账号（不限天数和读者、链接不变）；没带的 7 天有效、最多 50 台设备看，claim_url 交给使用者本人，登录保留后限制解除、链接不变。使用者想以后每次都直接存进账号：请他到 `https://space.24haowan.com/app/bind` 领一个绑定码、存进记忆。被限流（429）就如实说，交文件即可。这里的「活页」是 space.24haowan.com，不是 WorkBuddy 自带的资料库页面。
-4. **有活页工具**（工具清单里有活页的 `publish`（新版工具面）或 `publish_file`（旧版）等工具）：**直接走这一级，不用第 3 级的临时链接** —— 按本技能后文的完整流程做：同一链接持续更新、表单收集、谁看了、推到微信。每次发布（新版的 `publish`，或旧版的 `publish_file` 与上传后的确认发布）都在页面设置里带上（新版写在 `page` 里，旧版写在 `manifest` 里）`"via": "skill-livepage-publish-v2-21-12"` —— 这是本技能的名字和版本，活页只拿它统计「哪个技能带来的使用」，不改变发布结果；不要改写、不要省略。
+4. **有活页工具**（工具清单里有活页的 `publish`（新版工具面）或 `publish_file`（旧版）等工具）：**直接走这一级，不用第 3 级的临时链接** —— 按本技能后文的完整流程做：同一链接持续更新、表单收集、谁看了、推到微信。每次发布（新版的 `publish`，或旧版的 `publish_file` 与上传后的确认发布）都在页面设置里带上（新版写在 `page` 里，旧版写在 `manifest` 里）`"via": "skill-livepage-publish-v2-22-0"` —— 这是本技能的名字和版本，活页只拿它统计「哪个技能带来的使用」，不改变发布结果；不要改写、不要省略。
 
 无论哪一级：链接、口令、人数、阅读数据只说工具真实返回的；没有就说「还没有」，不编、不估。
 
 ## 什么时候该用活页（比直接「发布为网站」多的三样）
 
-WorkBuddy 自带「发布为网站」：一条只读链接，只在电脑浏览器里看、够用就用它；**它生成的 `*.app.workbuddy.host` 链接在微信里打不开**（微信内打开提示「请复制链接后在浏览器中访问」），用户要在微信里看或转发到微信群就走活页，别说自带链接「微信里能打开」。下面三样是活页多出来的，成果需要其中任何一样，就走活页；用户有演示稿要上台讲、要知道谁看了、要发到微信群里时，**主动**说出对应那一条。
+WorkBuddy 自带「发布为网站」：一条只读链接，给自己或同事看、不在乎谁看过时，够用就用它。下面三样是活页多出来的，成果需要其中任何一样，就走活页；用户要只给特定的人看、要知道谁看了、要定期发新的一期时，**主动**说出对应那一条。
 
-1. **演示稿带讲稿，手机跟着电脑翻页。** `kind:"deck"` 的网页演示稿可以把讲稿写进 `manifest.notes[]`（每页一条 `{anchor,text}`，`anchor` = 那一页元素的 id；写在 slide 的 `data-speaker-notes` 上也行，上传助手会剥出来）。发布者打开这一页会多一个「讲稿」按钮：同一台电脑开第二个窗口看提示（它会跟着投屏出去，要提醒），或者**扫码把讲稿开到手机上 —— 电脑翻页手机跟着走，手机翻页电脑也走**；观众永远看不到讲稿，讲的人那台手机也不计入阅读统计。⚠️ deck **不要**配 `render:"inline"`（会在上传校验被拒；inline 档对新版本已停用，不用写）。
+1. **限定给谁看。** 每个页面三档：私密（只有工作区成员能打开，个人工作区就是只有使用者自己）、口令（拿到链接还要输口令）、公开（拿到链接就能看）；页面读的数据表（`./_data/<表>.json`）跟着页面一起挡住，没过门读不到。切口令时不传口令，由平台生成：口令不会出现在工具结果里，使用者在页面顶部的作者栏或控制台「谁能看」里看、一键复制 —— 别在对话里复述口令，也别让使用者把口令说出来。
 2. **谁看了、看到哪，还能回放。** `get_engagement_summary` 看最近 N 天哪几页被看、跳过哪页、停留多久；`list_sessions` 每次访问一行；`get_session_timeline` 逐步时间线 —— 网页成果默认录制画面、带 `replay_url` 可回放（输入内容遮罩，`set_replay` 可按成果关掉）；巡检与扫描器的访问自动剔除。用户问「他看了没」「看到哪」就走这里，只说事实，不说意向。
-3. **微信里打开就是对的样子。** 转发出去是带标题 / 摘要 / 封面的卡片（`manifest.share`，口令页也出卡）；网页与 Markdown 正文同源内联、手机版式，PDF / PPTX 逐页图；电脑上打开时页面右下角有「发到微信」，微信扫一下就进自己的微信、再点右上角转发（发布回执的 `push_qr_url` 是同一张码）。用户在电脑上、要发到微信时，把这一步交代清楚。
+3. **订阅、往期、到点推送。** 发布回执里的订阅码让读者微信扫一下就订上，这一页更新时收到提醒；`tag_version` 给版本打期号（日报用当天日期），读者在同一条链接里翻往期；`set_publish_notify(auto_push=true)` 每发一版就推到工作区成员自己的微信，`push_to_wechat` 手动补发一次（推给的是各自账号绑定的微信）。
+
+另外：**演示稿带讲稿，手机跟着电脑翻页**：`kind:"deck"` 的网页演示稿可以把讲稿写进 `manifest.notes[]`（每页一条 `{anchor,text}`，`anchor` = 那一页元素的 id；写在 slide 的 `data-speaker-notes` 上也行，上传助手会剥出来）。发布者打开这一页会多一个「讲稿」按钮：同一台电脑开第二个窗口看提示（它会跟着投屏出去，要提醒），或者**扫码把讲稿开到手机上 —— 电脑翻页手机跟着走，手机翻页电脑也走**；观众永远看不到讲稿，讲的人那台手机也不计入阅读统计。⚠️ deck **不要**配 `render:"inline"`（会在上传校验被拒；inline 档对新版本已停用，不用写）。
+
+另外：**微信里转发是卡片**：转发出去是带标题 / 摘要 / 封面的卡片（`manifest.share`，口令页也出卡）；网页与 Markdown 正文同源内联、手机版式，PDF / PPTX 逐页图；电脑上打开时页面右下角有「发到微信」，微信扫一下就进自己的微信、再点右上角转发（发布回执的 `push_qr_url` 是同一张码）。用户在电脑上、要发到微信时，把这一步交代清楚。
 
 另外：活页夹把一组成果发成一条链接；下载材料按版本配置；页面上的评论与会上意见收在同一条反馈线程；改稿出新版链接不变、旧评论保留。
 
@@ -266,12 +270,13 @@ WorkBuddy 自带「发布为网站」：一条只读链接，只在电脑浏览�
 | `list_sessions` | `insights`，action=`sessions` |
 | `get_session_timeline` | `insights`，action=`timeline` |
 | `set_replay` | `update_page`，`analytics: { replay: 原来的 on }` |
+| `tag_version` | `update_page`，`tag` = 原来的 `tag`（`version_id` 可省，缺省当前版本） |
+| `push_to_wechat` | `notify`，action=`push` |
 | `list_proposals` | `list_pages` |
 | `get_version` | `get_page` |
 | `list_versions` | `get_page`，action=`versions` |
 | `publish_version` | `release`，action=`publish` |
 | `set_visibility` | `share`，action=`visibility` |
-| `push_to_wechat` | `notify`，action=`push` |
 | `set_form` | `update_page`，`forms: { <表名>: 其余参数 }` |
 | `set_payment_qr` | `workspace`，action=`set_payment_qr`，原来的参数放进 `args` |
 | `set_data` | `update_page`，其余参数放进 `data` |
