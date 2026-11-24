@@ -29,7 +29,7 @@ description: "Use when the user says \"share it to WeChat\", \"send this to WeCh
 
 - 当用户要在方案里引用「我们做过的类似案例」、或客户问「有没有同行业的参考」时，**先调用 `list_cases` / `get_case`**，用工具返回的实时结果回答；它比本包正文里的清单更新、更全。
 - 没接就跳过这一节：别去工具清单里找这几个名字，找不到时客户端会把名字最像的别家工具递给你。
-- 本包正文是 2026-11-09 的静态快照；两者冲突时以工具返回为准。
+- 本包正文是 2026-11-25 的静态快照；两者冲突时以工具返回为准。
 
 ## 先交付，再加成：按你手上的工具逐级做
 
@@ -43,7 +43,7 @@ description: "Use when the user says \"share it to WeChat\", \"send this to WeCh
    - https://space.24haowan.com/examples/sample-client-proposal/agent.md
    更多模板：`https://space.24haowan.com/examples.json`（每份都带 agent.md 与源码网址，免登录可读）。
 3. **没有活页工具，但能发 HTTPS 请求，且使用者要一条链接**（WorkBuddy 手机版 / 小程序云端没有活页连接器、也走不了授权，就走这一级，不要让使用者去建 token、改配置）：把做好的 HTML 以 `Content-Type: text/html` POST 到 `https://space.24haowan.com/api/quick?client=skill-livepage-publish`（Markdown 用 `text/markdown`）；使用者给过「活页绑定码」（`lpb-` 开头，常存在记忆里）就在网址后加 `&bind=<绑定码>`。返回 JSON 里：preview_url 先给使用者看；他确认后 POST `https://space.24haowan.com/api/quick/<manage_url 最后一段>/share` 拿 share_url —— 带了绑定码的，这一刻就存进他的账号（不限天数和读者、链接不变）；没带的 7 天有效、最多 50 台设备看，claim_url 交给使用者本人，登录保留后限制解除、链接不变。使用者想以后每次都直接存进账号：请他到 `https://space.24haowan.com/app/bind` 领一个绑定码、存进记忆。被限流（429）就如实说，交文件即可。这里的「活页」是 space.24haowan.com，不是 WorkBuddy 自带的资料库页面。
-4. **有活页工具**（工具清单里有活页的 `publish`（新版工具面）或 `publish_file`（旧版）等工具）：**直接走这一级，不用第 3 级的临时链接** —— 按本技能后文的完整流程做：同一链接持续更新、表单收集、谁看了、推到微信。每次发布（新版的 `publish`，或旧版的 `publish_file` 与上传后的确认发布）都在页面设置里带上（新版写在 `page` 里，旧版写在 `manifest` 里）`"via": "skill-livepage-publish-v2-22-0"` —— 这是本技能的名字和版本，活页只拿它统计「哪个技能带来的使用」，不改变发布结果；不要改写、不要省略。
+4. **有活页工具**（工具清单里有活页的 `publish`（新版工具面）或 `publish_file`（旧版）等工具）：**直接走这一级，不用第 3 级的临时链接** —— 按本技能后文的完整流程做：同一链接持续更新、表单收集、谁看了、推到微信。每次发布（新版的 `publish`，或旧版的 `publish_file` 与上传后的确认发布）都在页面设置里带上（新版写在 `page` 里，旧版写在 `manifest` 里）`"via": "skill-livepage-publish-v2-23-0"` —— 这是本技能的名字和版本，活页只拿它统计「哪个技能带来的使用」，不改变发布结果；不要改写、不要省略。
 
 无论哪一级：链接、口令、人数、阅读数据只说工具真实返回的；没有就说「还没有」，不编、不估。
 
@@ -133,6 +133,34 @@ WorkBuddy 自带「发布为网站」：一条只读链接，给自己或同事�
 - **活页只在页面上加一行**：每个 HTML 的 `<head>` 里多一行 `<script data-space-sdk src="/_space/sdk.js">`（阅读统计、录制、站外链接新窗口、deck 引擎），其余字节原样；`read_version` 读回的就是读者拿到的字节。
 - **本地先试**：`curl -sSO https://space.24haowan.com/cli/space.mjs` 后 `node space.mjs serve <目录>`，与线上同一套规则。
 - **仍然不行的**：以 `/` 开头的路径（指向子域名根，改相对路径）、Service Worker、包里的 `_space/` 目录、留在包里的 `data-speaker-notes`。出了事运营把出问题的工作区或页面切回收紧规则，不按域名拦。旧的 SDK `space.data.get` / `space.data.append` 与 `set_form` 表单块继续可用，是可选的。
+
+## 读者要提问、要 AI 回答：用页面自带的 AI
+
+页面要让读者问问题、由 AI 来答（门店问答、活动客服、产品说明书问答、课程答疑），**一律用活页自带的页面 AI**：页面里加一行 `<script src="/_space/ai.js"></script>`，调 `spaceAi.chat({ system, messages })`。
+
+- 读者不用登录。平台代持已备案的模型，问题和回答都过内容审核，页面自动标「本内容由 AI 生成」。
+- 用量记在工作区「AI 回答」月额度里：免费 200 · 个人版 1,000 · 专业版 3,000 次 / 月，与服务号助手共用。
+- **不要**做关键词匹配的假问答：清单外的问题会答非所问。
+- **不要**让用户去申请模型 Key，也不要把密钥贴进对话或写进页面。
+
+照抄这段，把店铺 / 活动资料写进 `system`；多轮对话时把前几轮一并放进 `messages`：
+
+```html
+<script src="/_space/ai.js"></script>
+<input id="q" placeholder="想问什么？"><button id="ask">提问</button><p id="a"></p>
+<script>
+document.getElementById('ask').onclick = async function () {
+  var a = document.getElementById('a'); a.textContent = '思考中…';
+  try {
+    var r = await spaceAi.chat({ system: '你是这家店的助手，只根据下面的资料回答；资料里没有就说不确定、请到店询问。\n资料：……',
+      messages: [{ role: 'user', content: document.getElementById('q').value }] });
+    a.textContent = r.message.content;
+  } catch (e) { a.textContent = e.code === 'ai_quota_exceeded' ? 'AI 助手本月休息了' : '暂时答不上来，请稍后再试'; }
+};
+</script>
+```
+
+失败时会 reject，并用 `err.code` 说明原因：额度用完 ai_quota_exceeded、问得太快 ai_rate_limited、问题没过审核 ai_input_blocked、没开通 ai_unavailable。页面要把原因告诉读者。完整说明见 https://getlivepage.com/for-agents.md 「页面里调模型」。
 
 ## 二、标准流程（每一步就是一个工具）
 
